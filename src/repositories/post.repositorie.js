@@ -1,60 +1,71 @@
 const Connection = require("../libs/mysql");
 const Post = require("../models/post");
-
+const { models } = require("./../database/models/index");
 
 class PostRepository {
   #posts = [];
-  #connection=null;
+  #connection = null;
 
   constructor() {
     this.#posts = [];
     //this.#connection = await Connection();
     this.getConnection();
   }
-  
-  async getConnection(){
+
+  async getConnection() {
     this.#connection = await Connection();
   }
 
   async get() {
-    const query = "SELECT * FROM posts";
-    const [rows] = await this.#connection.execute(query);
-    return rows.map((rw) => new Post(rw.id, rw.title, rw.content));
+    const posts = await models.Post.findAll();
+    return posts.map((post) => new Post(post.id, post.title, post.content));
   }
 
   async create(post) {
-    console.log("Post recibido en repo:", post);
-    console.log("Valores:", post.title, post.content);
-    const query = "INSERT INTO posts (title, content) VALUES (?, ?)";
-    const [rows] = await this.#connection.execute(query, [post.gettitle(), post.getcontent()]);
-    
-    post.setid(rows.insertId);
+    const newPost = await models.Post.create({
+      title: post.gettitle(),
+      content: post.getcontent(),
+    });
+
+    post.setid(newPost.id);
     return post;
   }
 
   async update(updatedPost) {
-    const query = "UPDATE posts SET title = ?, content = ? WHERE id = ?";
-    const [rows] = await this.#connection.execute(query, [updatedPost.gettitle(), updatedPost.getcontent(), updatedPost.getid()]);
-    return updatedPost;
+    await models.Post.update(
+      {
+        title: updatedPost.gettitle(),
+        content: updatedPost.getcontent(),
+      },
+      {
+        where: {
+          id: updatedPost.getid(),
+        },
+      }
+    );
   }
 
   async getById(id) {
-    const query = "SELECT * FROM posts WHERE id = ?";
-    const [rows] = await this.#connection.execute(query, [id]);
+    const post = await models.Post.findByPk(id);
 
-    if (rows.length === 0) {
+    if (!post) {
       return null;
     }
-
-    const row = rows[0];
-    return new Post(row.id, row.title, row.content);
+    return new Post(post.id, post.title, post.content);
   }
 
   async delete(id) {
-    const query = "DELETE FROM posts WHERE id = ?";
-    const [rows] = await this.#connection.execute(query, [id]);
-    const postDelete = this.getById(id);
-    return postDelete;
+    const post = await this.getById(id);
+    if (!post) {
+      return null;
+    } else {
+      await models.Post.destroy({
+        where: {
+          id: id,
+        }
+      });
+      return post;
+    }
   }
 }
 
