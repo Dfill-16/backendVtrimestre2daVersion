@@ -3,12 +3,9 @@ const Post = require("../models/post");
 const { models } = require("./../libs/sequelize");
 
 class PostRepository {
-  #posts = [];
   #connection = null;
 
   constructor() {
-    this.#posts = [];
-    //this.#connection = await Connection();
     this.getConnection();
   }
 
@@ -63,7 +60,7 @@ class PostRepository {
       await models.Post.destroy({
         where: {
           id: id,
-        }
+        },
       });
       return post;
     }

@@ -21,6 +21,12 @@ const PostSchema = {
 class Post extends Model {
   static associate(models) {
     //Relaciones
+    this.hasMany(models.Comment, {
+      foreignKey: "postId",
+      as: "comments",
+      onDelete: "RESTRICT",
+      onUpdate: "CASCADE",
+    });
   }
 
   static config(sequelize) {

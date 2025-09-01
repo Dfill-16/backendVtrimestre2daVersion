@@ -1,8 +1,6 @@
 const crypto = require("crypto");
 const PostRepository = require("../repositories/post.repositorie");
 const Post = require("../models/post");
-const { json } = require("stream/consumers");
-
 
 class PostService {
   #repository;
