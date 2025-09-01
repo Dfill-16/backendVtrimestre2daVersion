@@ -1,6 +1,6 @@
 const Connection = require("../libs/mysql");
 const Post = require("../models/post");
-const { models } = require("./../database/models/index");
+const { models } = require("./../libs/sequelize");
 
 class PostRepository {
   #posts = [];
@@ -43,6 +43,7 @@ class PostRepository {
         },
       }
     );
+    return updatedPost;
   }
 
   async getById(id) {
