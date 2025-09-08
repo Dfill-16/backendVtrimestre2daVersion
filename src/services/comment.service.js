@@ -1,5 +1,7 @@
+const UseMongo = true;
 const crypto = require("crypto");
-const CommentRepository = require("../repositories/comment.repositorie");
+const CommentRepository = UseMongo ? require("./../repositories/comment.mongo.repositorie.js")
+    : require("./../repositories/comment.repositorie.js");
 const Comment = require("../models/comment");
 
 class CommentService {

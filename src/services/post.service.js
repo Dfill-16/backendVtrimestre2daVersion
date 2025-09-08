@@ -1,5 +1,9 @@
+const UseMongo = true;
+
 const crypto = require("crypto");
-const PostRepository = require("../repositories/post.repositorie");
+const PostRepository = UseMongo ? require("./../repositories/post.mongo.repositorie.js")
+    : require("./../repositories/post.repositorie.js");
+
 const Post = require("../models/post");
 
 class PostService {
@@ -14,20 +18,19 @@ class PostService {
     return posts.map((post) => post.getValues());
   }
 
-  async create(title, content) {
-    const id = crypto.randomUUID();
-    const post = new Post(id, title, content);
+  async create(title, content, author) {
+    const post = new Post(null, title, content, author);
     const postCreated = await this.#repository.create(post);
     return postCreated.getValues();
   }
 
-  async update(id, title, content) {
+  async update(id, title, content, author) {
     const existente =await this.#repository.getById(id);
     if (!existente) {
       return null;
     }
     console.log("service",id, title, content);
-    const updatedPost = new Post(id, title, content);
+    const updatedPost = new Post(id, title, content, author);
     const actualizado = await this.#repository.update(updatedPost);
     return actualizado.getValues();
   }

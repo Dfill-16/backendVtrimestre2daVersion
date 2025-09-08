@@ -57,11 +57,7 @@ class PostRepository {
     if (!post) {
       return null;
     } else {
-      await models.Post.destroy({
-        where: {
-          id: id,
-        },
-      });
+      await models.Post.destroy({where: {id: id, },});
       return post;
     }
   }
