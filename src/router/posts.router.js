@@ -2,6 +2,7 @@ const { Router } = require("express");
 const PostService = require("../services/post.service");
 const router = Router();
 const postService = new PostService();
+const postSchema = require("../schemas/post.schema");
 
 router.get("/", async (req, res) => {
   const posts = await postService.get();
