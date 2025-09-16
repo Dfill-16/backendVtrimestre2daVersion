@@ -1,5 +1,7 @@
 const { Router } = require("express");
 const CommentService = require("../services/comment.service");
+const ValidationHandler = require("../middlewares/validator.handle");
+const commentSchema = require("../schemas/comment.schema");
 const router = Router();
 const commentService = new CommentService();
 
@@ -8,16 +10,13 @@ router.get("/", async (req, res) => {
   res.status(200).json(comments);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", ValidationHandler(commentSchema.create, "body"), async (req, res) => {
   const { postId, content } = req.body;
-  if (!postId || !content) {
-    return res.status(400).json({ error: "Faltan datos requeridos" });
-  }
   const comment = await commentService.create(postId, content);
   res.status(201).json(comment);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", ValidationHandler(commentSchema.update, "body"), ValidationHandler(commentSchema.get, "params"), async (req, res) => {
   const { postId, content } = req.body;
   const id = req.params.id;
   const comment = await commentService.update(id, postId, content);
@@ -27,10 +26,10 @@ router.put("/:id", async (req, res) => {
   res.status(200).json(comment);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", ValidationHandler(commentSchema.get, "params"), async (req, res) => {
   const id = req.params.id;
   const deleted = await commentService.getById(id);
-  const comment = commentService.delete(id);
+  const comment = await commentService.delete(id);
   if (!comment) {
     res.status(404).json({ message: "Comment not found" });
     return;
@@ -38,7 +37,7 @@ router.delete("/:id", async (req, res) => {
   res.status(200).json({ "Comment eliminado": deleted });
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", ValidationHandler(commentSchema.get, "params"), async (req, res) => {
   const id = req.params.id;
   const comment = await commentService.getById(id);
   if (!comment) {

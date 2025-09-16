@@ -1,5 +1,5 @@
 const joi = require("joi");
-const useMongo = false
+const useMongo = true
 
 const postSchemaSql = joi.object({
   id: joi.number().integer().positive(),  
