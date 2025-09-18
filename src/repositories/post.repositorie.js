@@ -3,11 +3,10 @@ const Post = require("../models/post");
 
 
 class PostRepository {
-  #posts = [];
+  
   #connection=null;
 
   constructor() {
-    this.#posts = [];
     //this.#connection = await Connection();
     this.getConnection();
   }
