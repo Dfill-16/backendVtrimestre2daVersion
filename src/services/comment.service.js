@@ -1,5 +1,4 @@
 const UseMongo = true;
-const crypto = require("crypto");
 const CommentRepository = UseMongo ? require("./../repositories/comment.mongo.repositorie.js")
     : require("./../repositories/comment.repositorie.js");
 const Comment = require("../models/comment");
@@ -17,8 +16,7 @@ class CommentService {
   }
 
   async create(postId, content) {
-    const id = crypto.randomUUID();
-    const comment = new Comment(id, postId, content);
+    const comment = new Comment(null, postId, content);
     const commentCreated = await this.#repository.create(comment);
     return commentCreated.getValues();
   }
