@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const postsRouter = require("./posts.router");
 const commentRouter = require("./comment.router");
+const userRouter = require("./user.router");
 const router = Router();
 
 function setUpRoutes(app) {
@@ -9,6 +10,7 @@ function setUpRoutes(app) {
     });
     router.use("/posts", postsRouter);
     router.use("/comments", commentRouter);
+    router.use("/users", userRouter);
 }
 
 module.exports = setUpRoutes

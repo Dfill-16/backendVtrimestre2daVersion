@@ -43,13 +43,14 @@ class User {
     this.#password = value;
   }
 
-  getValues() {
-    return {
+  getValues(includePassword = false) {
+    const values = {
       id: this.#id,
       name: this.#name,
       email: this.#email,
-      password: this.#password,
+      password: includePassword ? this.#password : null,
     };
+    return values;
   }
 }
 
