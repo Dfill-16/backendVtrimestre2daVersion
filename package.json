@@ -5,7 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/index.js",
+    "migration": "sequelize-cli db:migrate",
+    "migration:undo": "sequelize-cli db:migrate:undo",
+    "seed": "sequelize-cli db:seed:all",
+    "seed:undo": "sequelize-cli db:seed:undo:all",
+    "migration:create": "sequelize-cli migration:create",
+    "migration:generate": "sequelize-cli migration:generate",
+    "seed:generate": "sequelize-cli seed:generate"
   },
   "keywords": [],
   "author": "",
