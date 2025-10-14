@@ -22,8 +22,8 @@ const CommentSchema = {
     type: DataTypes.TEXT("long"),
     allowNull: false,
   },
-};
 
+};
 class Comment extends Model {
   static associate(models) {
     //Relaciones

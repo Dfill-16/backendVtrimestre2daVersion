@@ -1,4 +1,4 @@
-const UseMongo = true; // 👈 cambia esto según lo que quieras usar
+const UseMongo = false; // 👈 cambia esto según lo que quieras usar
 
 const USER = encodeURIComponent("root");
 const PASS = encodeURIComponent("");
